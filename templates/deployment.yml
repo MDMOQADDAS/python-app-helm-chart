@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: {{ .Release.Name }}-deployment
+    namespace: {{ .Values.namespace }}
+    labels:
+        app: python
+        region: in
+spec:
+    selector:
+        matchLabels:
+            app: python
+    replicas: 1
+    template:
+        metadata:
+            name: {{ .Release.Name }}-pod
+            labels:
+                app: python
+        spec:
+            #imagePullSecrets:
+             #- name: gitlab-container-registry
+            containers:
+                - name: {{ .Release.Name }}-container
+                  image: {{ .Values.image.repository }}:{{.Values.tag}}
+                  ports:
+                      - containerPort: {{ .Values.containerPort  }}
+
